@@ -1,26 +1,111 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import {
+  DragDropContext,
+} from 'react-beautiful-dnd'
+import initialData from './initial-data'
+import Column from './Column'
 
-function App() {
+import styled from 'styled-components'
+
+import './App.css'
+
+const Container = styled.div`
+  display:flex;
+  align-self: center;
+  justify-self: center;
+`
+
+const App = () => {
+  const [state, setState] = useState(initialData)
+
+  const onDragEnd = result => {
+    const { destination, source, draggableId } = result
+
+    if (!destination) {
+      return
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return
+    }
+
+    const start = state.columns[source.droppableId]
+    const finish = state.columns[destination.droppableId]
+
+    if (start === finish) {
+      const newCardIds = Array.from(start.cardIds)
+      newCardIds.splice(source.index, 1)
+      newCardIds.splice(destination.index, 0, draggableId)
+
+      const newColumn = {
+        ...start,
+        cardIds: newCardIds
+      }
+
+      const newState = {
+        ...state,
+        columns: {
+          ...state.columns,
+          [newColumn.id]: newColumn
+        }
+      }
+
+      setState(newState)
+      return
+    }
+
+    // Moving from one list to another
+    const startCardIds = Array.from(start.cardIds)
+    startCardIds.splice(source.index, 1)
+
+    const finishCardIds = Array.from(finish.cardIds)
+    finishCardIds.splice(destination.index, 0, draggableId)
+
+    const trans = finishCardIds.pop()
+
+    startCardIds.push(trans)
+
+    const newStart = {
+      ...start,
+      cardIds: startCardIds
+    }
+
+    const newFinish = {
+      ...finish,
+      cardIds: finishCardIds
+    }
+
+    console.log({ start: startCardIds, finish: finishCardIds });
+
+    const newState = {
+      ...state,
+      columns: {
+        ...state.columns,
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish
+      }
+    }
+    setState(newState)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Container>
+        {state.columnOrder.map(columnId => {
+          const column = state.columns[columnId]
+          const cards = column.cardIds.map(
+            cardId => state.cards[cardId]
+          )
+          return (
+            <Column key={column.id} column={column} cards={cards} />
+          )
+        })}
+      </Container>
+    </DragDropContext>
+  )
 }
 
-export default App;
+export default App
