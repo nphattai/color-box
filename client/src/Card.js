@@ -3,8 +3,8 @@ import { Draggable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  height: 60px;
-  width: 60px;
+  height: 3vw;
+  width: 3vw;
   flex-direction: column;
   align-items: center;
   border: 1px solid lightgrey;
@@ -29,7 +29,6 @@ const Card = ({ card, index }) => {
                     isDragging={snapshot.isDragging}
                     color={card.color}
                 >
-                    {card.content}
                 </Container>
             )}
         </Draggable>
