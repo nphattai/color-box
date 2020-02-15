@@ -1,0 +1,1 @@
+{"version":3,"sources":["App.css"],"names":[],"mappings":"AAAA,KACE,wBAAyB,CACzB,qBAAsB,CACtB,kBACF","file":"main.ddd1c0c9.chunk.css","sourcesContent":["body {\n  background-color: #282c34;\n  flex-direction: column;\n  align-items: center;\n}"]}

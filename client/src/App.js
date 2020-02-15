@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-import {
-  DragDropContext,
-} from 'react-beautiful-dnd'
+import { DragDropContext } from 'react-beautiful-dnd'
 import initialData from './initial-data'
-import Column from './Column'
-
 import styled from 'styled-components'
-
+import Column from './Column'
 import './App.css'
 
 const Container = styled.div`
@@ -35,6 +31,7 @@ const App = () => {
     const start = state.columns[source.droppableId]
     const finish = state.columns[destination.droppableId]
 
+    // Source and Destination at same column
     if (start === finish) {
       const newCardIds = Array.from(start.cardIds)
       newCardIds.splice(source.index, 1)
@@ -57,7 +54,7 @@ const App = () => {
       return
     }
 
-    // Moving from one list to another
+    // Source and Destination at differrent column
     const startCardIds = Array.from(start.cardIds)
     startCardIds.splice(source.index, 1)
 
@@ -77,8 +74,6 @@ const App = () => {
       ...finish,
       cardIds: finishCardIds
     }
-
-    console.log({ start: startCardIds, finish: finishCardIds });
 
     const newState = {
       ...state,
