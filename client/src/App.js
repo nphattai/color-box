@@ -6,7 +6,7 @@ import Column from './Column'
 import './App.css'
 
 const Container = styled.div`
-  display:flex;
+  display: flex;
   align-self: center;
   justify-self: center;
 `
@@ -14,7 +14,7 @@ const Container = styled.div`
 const App = () => {
   const [state, setState] = useState(initialData)
 
-  const onDragEnd = result => {
+  const onDragEnd = (result) => {
     const { destination, source, draggableId } = result
 
     if (!destination) {
@@ -89,14 +89,10 @@ const App = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Container>
-        {state.columnOrder.map(columnId => {
+        {state.columnOrder.map((columnId) => {
           const column = state.columns[columnId]
-          const cards = column.cardIds.map(
-            cardId => state.cards[cardId]
-          )
-          return (
-            <Column key={column.id} column={column} cards={cards} />
-          )
+          const cards = column.cardIds.map((cardId) => state.cards[cardId])
+          return <Column key={column.id} column={column} cards={cards} />
         })}
       </Container>
     </DragDropContext>
